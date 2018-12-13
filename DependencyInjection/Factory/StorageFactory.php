@@ -4,7 +4,7 @@ namespace SRIO\RestUploadBundle\DependencyInjection\Factory;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Reference;
 
 class StorageFactory
@@ -17,13 +17,13 @@ class StorageFactory
         $adapterId = $config['filesystem'].'.adapter';
 
         if ($config['type'] === 'gaufrette') {
-            $adapterDefinition = new DefinitionDecorator('srio_rest_upload.storage.gaufrette_adapter');
+            $adapterDefinition = new ChildDefinition('srio_rest_upload.storage.gaufrette_adapter');
             $adapterDefinition->setPublic(false);
             $adapterDefinition->replaceArgument(0, new Reference($config['filesystem']));
 
             $container->setDefinition($adapterId, $adapterDefinition);
         } elseif ($config['type'] === 'flysystem') {
-            $adapterDefinition = new DefinitionDecorator('srio_rest_upload.storage.flysystem_adapter');
+            $adapterDefinition = new ChildDefinition('srio_rest_upload.storage.flysystem_adapter');
             $adapterDefinition->setPublic(false);
             $adapterDefinition->replaceArgument(0, new Reference($config['filesystem']));
 

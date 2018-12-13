@@ -4,7 +4,7 @@ namespace SRIO\RestUploadBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
@@ -85,7 +85,7 @@ class SRIORestUploadExtension extends Extension
      */
     private function createStorageVoter(ContainerBuilder $builder, $service)
     {
-        $definition = new DefinitionDecorator($service);
+        $definition = new ChildDefinition($service);
         $builder->setDefinition('srio_rest_upload.storage_voter', $definition);
     }
 }
