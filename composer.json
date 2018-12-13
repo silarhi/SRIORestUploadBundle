@@ -24,12 +24,6 @@
         "knplabs/knp-gaufrette-bundle": "^0.5.0",
         "oneup/flysystem-bundle": "^3.0"
     },
-    "suggest": {
-        "doctrine/orm": ">=2.2.3,<2.4-dev",
-        "doctrine/doctrine-bundle": ">=1.2.0",
-        "knplabs/knp-gaufrette-bundle": "Required if you use the knplabs/gaufrette filesystem abstraction layer",
-        "oneup/flysystem-bundle": "Required if you use the league/flysystem filesystem abstraction layer"
-    },
     "autoload": {
         "psr-0": { "SRIO\\RestUploadBundle": "" }
     },
