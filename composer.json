@@ -13,7 +13,6 @@
     ],
     "require": {
         "php": "^7.1",
-        "symfony/symfony": "^4.0",
         "incenteev/composer-parameter-handler": "~2.0"
     },
     "require-dev": {
