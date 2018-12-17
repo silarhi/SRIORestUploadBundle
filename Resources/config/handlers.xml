@@ -10,7 +10,7 @@
     </parameters>
 
     <services>
-        <service id="srio_rest_upload.upload_handler" class="%srio_rest_upload.upload_handler.class%">
+        <service id="srio_rest_upload.upload_handler" class="%srio_rest_upload.upload_handler.class%" public="true">
             <argument>%srio_rest_upload.upload_type_parameter%</argument>
         </service>
         <service id="srio_rest_upload.storage_handler" class="%srio_rest_upload.storage_handler.class%">
