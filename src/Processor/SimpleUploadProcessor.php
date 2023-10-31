@@ -29,7 +29,7 @@ class SimpleUploadProcessor extends AbstractUploadProcessor
             $this->form->submit($formData);
         }
 
-        if (null == $this->form || ($this->form->isSubmitted() && $this->form->isValid())) {
+        if (null === $this->form || ($this->form->isSubmitted() && $this->form->isValid())) {
             $content = $request->getContent();
 
             // Nothing to store

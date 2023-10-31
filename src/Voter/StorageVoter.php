@@ -45,7 +45,7 @@ class StorageVoter
      */
     public function getStorage(UploadContext $context): FileStorage
     {
-        if (0 == count($this->storages)) {
+        if (0 === count($this->storages)) {
             throw new UploadException('No storage found');
         }
 

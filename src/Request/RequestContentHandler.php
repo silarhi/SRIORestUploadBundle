@@ -62,7 +62,7 @@ class RequestContentHandler implements RequestContentHandlerInterface
      */
     public function eof(): bool
     {
-        return -1 == $this->cursor || (is_resource($this->getContent()) && feof($this->getContent()));
+        return -1 === $this->cursor || (is_resource($this->getContent()) && feof($this->getContent()));
     }
 
     /**

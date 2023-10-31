@@ -52,7 +52,7 @@ class ResumableUploadProcessor extends AbstractUploadProcessor
             $repository = $this->getRepository();
             $resumableUpload = $repository->findOneBy(['sessionId' => $uploadId]);
 
-            if (null == $resumableUpload) {
+            if (null === $resumableUpload) {
                 throw new UploadProcessorException('Unable to find upload session');
             }
 
@@ -83,14 +83,14 @@ class ResumableUploadProcessor extends AbstractUploadProcessor
         $result->setForm($this->form);
 
         $formData = [];
-        if (null != $this->form) {
+        if (null !== $this->form) {
             // Submit form data
             $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
             $formData = $this->createFormData($data);
             $this->form->submit($formData);
         }
 
-        if (null == $this->form || $this->form->isValid()) {
+        if (null === $this->form || $this->form->isValid()) {
             // Form is valid, store it
             $repository = $this->getRepository();
             $className = $repository->getClassName();
@@ -144,14 +144,14 @@ class ResumableUploadProcessor extends AbstractUploadProcessor
             $file
         ));
 
-        $contentLength = $request->headers->get('Content-Length');
+        $contentLength = (int) $request->headers->get('Content-Length');
         if ($request->headers->has('Content-Range')) {
             $range = $this->parseContentRange($request->headers->get('Content-Range'));
 
             if ($range['total'] != $uploadSession->getContentLength()) {
                 throw new UploadProcessorException(sprintf('File size must be "%d", range total length is %d', $uploadSession->getContentLength(), $range['total']));
             } elseif ('*' === $range['start']) {
-                if (0 == $contentLength) {
+                if (0 === $contentLength) {
                     $file = $this->storageHandler->getFilesystem($context)->get($filePath);
 
                     return $this->requestUploadStatus($file, $range);
@@ -190,7 +190,7 @@ class ResumableUploadProcessor extends AbstractUploadProcessor
         // return like the request upload status
         if ($size < $uploadSession->getContentLength()) {
             return $this->requestUploadStatus($file, $range);
-        } elseif ($size == $uploadSession->getContentLength()) {
+        } elseif ($size === $uploadSession->getContentLength()) {
             return $this->handleCompletedUpload($context, $uploadSession, $file);
         } else {
             throw new UploadProcessorException('Written file size is greater that expected Content-Length');
@@ -205,13 +205,13 @@ class ResumableUploadProcessor extends AbstractUploadProcessor
         $result = new UploadResult();
         $result->setForm($this->form);
 
-        if (null != $this->form) {
+        if (null !== $this->form) {
             // Submit the form data
             $formData = unserialize($uploadSession->getData());
             $this->form->submit($formData);
         }
 
-        if (null == $this->form || $this->form->isValid()) {
+        if (null === $this->form || $this->form->isValid()) {
             // Create the uploaded file
             $uploadedFile = new UploadedFile(
                 $this->storageHandler->getStorage($context),
@@ -231,7 +231,7 @@ class ResumableUploadProcessor extends AbstractUploadProcessor
     {
         $length = $file->exists() ? $file->getSize() : 0;
 
-        $response = new Response(null, $length == $range['total'] ? 201 : 308);
+        $response = new Response(null, $length === $range['total'] ? 201 : 308);
 
         if ($length < 1) {
             $length = 1;

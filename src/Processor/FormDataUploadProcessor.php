@@ -38,7 +38,7 @@ class FormDataUploadProcessor extends SimpleUploadProcessor
         $response->setRequest($request);
         $response->setConfig($this->config);
 
-        if (null != $this->form) {
+        if (null !== $this->form) {
             $response->setForm($this->form);
 
             if (!$request->request->has($this->config[self::KEY_FIELD_FORM])) {

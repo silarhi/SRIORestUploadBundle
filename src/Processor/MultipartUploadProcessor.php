@@ -27,7 +27,7 @@ class MultipartUploadProcessor extends AbstractUploadProcessor
         $result->setForm($this->form);
 
         // Submit form data
-        if (null != $this->form) {
+        if (null !== $this->form) {
             // Get formData
             $formData = $this->getFormData($request);
             $formData = $this->createFormData($formData);
@@ -90,7 +90,7 @@ class MultipartUploadProcessor extends AbstractUploadProcessor
         [$contentType] = $this->parseContentTypeAndBoundary($request);
 
         $expectedContentType = 'multipart/related';
-        if ($contentType != $expectedContentType) {
+        if ($contentType !== $expectedContentType) {
             throw new UploadProcessorException(sprintf('Content-Type must be %s', $expectedContentType));
         }
 
@@ -112,7 +112,7 @@ class MultipartUploadProcessor extends AbstractUploadProcessor
         }
 
         $headerLimitation = strpos($content, "\r\n\r\n");
-        if (false == $headerLimitation) {
+        if (false === $headerLimitation) {
             throw new UploadProcessorException('Unable to determine headers limit');
         }
 
@@ -126,12 +126,12 @@ class MultipartUploadProcessor extends AbstractUploadProcessor
 
         foreach (explode("\r\n", $headersContent) as $header) {
             $parts = explode(':', $header);
-            if (2 != count($parts)) {
+            if (2 !== count($parts)) {
                 continue;
             }
 
             $name = trim($parts[0]);
-            if ('content-type' == strtolower($name)) {
+            if ('content-type' === strtolower($name)) {
                 $contentType = trim($parts[1]);
                 break;
             }
@@ -161,7 +161,7 @@ class MultipartUploadProcessor extends AbstractUploadProcessor
 
             if (0 === $boundaryCount) {
                 if ($line !== $delimiter) {
-                    if ($contentHandler->getCursor() == strlen($line)) {
+                    if ($contentHandler->getCursor() === strlen($line)) {
                         throw new UploadProcessorException('Expected boundary delimiter');
                     }
                 } else {
@@ -189,7 +189,7 @@ class MultipartUploadProcessor extends AbstractUploadProcessor
     protected function parseContentTypeAndBoundary(Request $request): array
     {
         $contentParts = explode(';', $request->headers->get('Content-Type'));
-        if (2 != count($contentParts)) {
+        if (2 !== count($contentParts)) {
             throw new UploadProcessorException('Boundary may be missing');
         }
 

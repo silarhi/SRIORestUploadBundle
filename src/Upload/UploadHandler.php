@@ -44,7 +44,7 @@ class UploadHandler
 
             return $processor->handleUpload($request, $form, $config);
         } catch (UploadException $uploadException) {
-            if (null != $form) {
+            if (null !== $form) {
                 $form->addError(new FormError($uploadException->getMessage()));
             }
 
