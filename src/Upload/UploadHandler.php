@@ -12,19 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UploadHandler
 {
-    /**
-     * @var array
-     */
-    protected $processors = [];
+    protected array $processors = [];
 
-    /**
-     * Constructor.
-     *
-     * @var string
-     *
-     * @param string $uploadTypeParameter
-     */
-    public function __construct(protected $uploadTypeParameter)
+    public function __construct(protected string $uploadTypeParameter)
     {
     }
 
@@ -33,7 +23,7 @@ class UploadHandler
      *
      * @throws LogicException
      */
-    public function addProcessor($uploadType, ProcessorInterface $processor): void
+    public function addProcessor(string $uploadType, ProcessorInterface $processor): void
     {
         if (array_key_exists($uploadType, $this->processors)) {
             throw new LogicException(sprintf('A processor is already registered for type %s', $uploadType));

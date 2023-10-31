@@ -19,5 +19,5 @@ class ResumableUploadSession extends BaseResumableUploadSession
      *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    public ?int $id = null;
 }

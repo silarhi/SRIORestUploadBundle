@@ -2,6 +2,7 @@
 
 namespace SRIO\RestUploadBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -16,11 +17,14 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('srio_rest_upload');
         $rootNode = $treeBuilder->getRootNode();
+        assert($rootNode instanceof ArrayNodeDefinition);
+
+        // @phpstan-ignore-next-line
         $rootNode
             ->children()
                 ->arrayNode('storages')
                     ->useAttributeAsKey('name')
-                    ->prototype('array')
+                    ->arrayPrototype()
                         ->children()
                             ->enumNode('type')
                                 ->values(['gaufrette', 'flysystem'])

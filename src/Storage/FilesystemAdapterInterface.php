@@ -20,8 +20,6 @@ interface FilesystemAdapterInterface
     /**
      * Indicates whether the file matching the specified name exists.
      *
-     * @param string $path
-     *
      * @return bool TRUE if the file exists, FALSE otherwise
      */
     public function has(string $path): bool;
@@ -37,8 +35,8 @@ interface FilesystemAdapterInterface
      * Writes the given content into the new file.
      *
      * @param string $path    Name of the file
-     * @param mixed $content Content to write in the file
-     * @param array   $config  Any data or settings to pass down
+     * @param mixed  $content Content to write in the file
+     * @param array  $config  Any data or settings to pass down
      *
      * @return bool Whether the write succeeded or not
      *
@@ -49,9 +47,9 @@ interface FilesystemAdapterInterface
     /**
      * Writes the given content into the new file stream.
      *
-     * @param string $path     Name of the file
+     * @param string   $path     Name of the file
      * @param resource $resource Stream to write in the file
-     * @param array     $config   Any data or settings to pass down
+     * @param array    $config   Any data or settings to pass down
      *
      * @return bool Whether the write succeeded or not
      *
@@ -64,7 +62,7 @@ interface FilesystemAdapterInterface
      *
      * @param string $path    Name of the file
      * @param string $content Content to write in the file
-     * @param array   $config  Any data or settings to pass down
+     * @param array  $config  Any data or settings to pass down
      *
      * @return bool Whether the write succeeded or not
      */
@@ -73,9 +71,9 @@ interface FilesystemAdapterInterface
     /**
      * Writes the given content into the new file or replaces the old contents.
      *
-     * @param string $path     Name of the file
+     * @param string   $path     Name of the file
      * @param resource $resource Stream to write in the file
-     * @param array     $config   Any data or settings to pass down
+     * @param array    $config   Any data or settings to pass down
      *
      * @return bool Whether the write succeeded or not
      */
@@ -106,8 +104,6 @@ interface FilesystemAdapterInterface
     /**
      * Deletes the file matching the specified name.
      *
-     * @param string $path
-     *
      * @throws FileNotFoundException
      */
     public function delete(string $path): bool;
@@ -127,8 +123,6 @@ interface FilesystemAdapterInterface
     /**
      * Returns the last modified time of the specified file.
      *
-     * @param string $path
-     *
      * @return int An UNIX like timestamp
      *
      * @throws FileNotFoundException
@@ -138,8 +132,6 @@ interface FilesystemAdapterInterface
     /**
      * Returns the size of the specified file's content.
      *
-     * @param string $path
-     *
      * @return int File size in Bytes
      *
      * @throws FileNotFoundException
@@ -148,8 +140,6 @@ interface FilesystemAdapterInterface
 
     /**
      * Returns the mime type of the specified file.
-     *
-     * @param string $path
      *
      * @throws FileNotFoundException
      */

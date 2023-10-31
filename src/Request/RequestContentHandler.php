@@ -8,15 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RequestContentHandler implements RequestContentHandlerInterface
 {
-    /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * @var int
-     */
-    protected $cursor = 0;
+    protected int $cursor = 0;
 
     /**
      * @var string|resource
@@ -26,9 +18,8 @@ class RequestContentHandler implements RequestContentHandlerInterface
     /**
      * Constructor.
      */
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
-        $this->request = $request;
     }
 
     /**
@@ -36,7 +27,7 @@ class RequestContentHandler implements RequestContentHandlerInterface
      *
      * If false is return, it's the end of file.
      */
-    public function gets(): string
+    public function gets(): false|string
     {
         $content = $this->getContent();
         if (is_resource($content)) {
@@ -47,7 +38,7 @@ class RequestContentHandler implements RequestContentHandlerInterface
         }
 
         $next = strpos($content, "\r\n", $this->cursor);
-        $eof = $next < 0 || false === $next;
+        $eof = $next === 0 || false === $next;
 
         if ($eof) {
             $line = substr($content, $this->cursor);
@@ -89,7 +80,7 @@ class RequestContentHandler implements RequestContentHandlerInterface
             } catch (LogicException) {
                 $this->content = $this->request->getContent(false);
 
-                if ($this->content === '' || $this->content === '0') {
+                if ('' === $this->content || '0' === $this->content) {
                     throw new RuntimeException('Unable to get request content');
                 }
             }

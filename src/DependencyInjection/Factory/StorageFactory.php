@@ -13,7 +13,7 @@ class StorageFactory
     /**
      * Create the storage service.
      */
-    public function create(ContainerBuilder $container, $id, array $config): void
+    public function create(ContainerBuilder $container, string $id, array $config): void
     {
         $adapterId = $config['filesystem'].'.adapter';
 

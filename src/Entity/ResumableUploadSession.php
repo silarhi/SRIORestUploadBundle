@@ -10,121 +10,91 @@ class ResumableUploadSession
 {
     /**
      * The session ID.
-     *
-     * @var string
      */
-    protected $sessionId;
+    protected ?string $sessionId = null;
 
     /**
      * The destination file path.
-     *
-     * @var string
      */
-    protected $filePath;
+    protected ?string $filePath = null;
 
     /**
      * Name of storage used.
-     *
-     * @var string
      */
-    protected $storageName;
+    protected ?string $storageName = null;
 
     /**
      * The form data.
-     *
-     * @var string
      */
-    protected $data;
+    protected ?string $data = null;
 
     /**
      * Content type.
-     *
-     * @var string
      */
-    protected $contentType;
+    protected ?string $contentType = null;
 
     /**
      * Content length.
-     *
-     * @var int
      */
-    protected $contentLength;
+    protected ?int $contentLength = null;
 
-    /**
-     * @param string $filePath
-     */
-    public function setFilePath($filePath): void
-    {
-        $this->filePath = $filePath;
-    }
-
-    public function getFilePath(): string
-    {
-        return $this->filePath;
-    }
-
-    /**
-     * @param string $sessionId
-     */
-    public function setSessionId($sessionId): void
-    {
-        $this->sessionId = $sessionId;
-    }
-
-    public function getSessionId(): string
+    public function getSessionId(): ?string
     {
         return $this->sessionId;
     }
 
-    /**
-     * @param string $data
-     */
-    public function setData($data): void
+    public function setSessionId(?string $sessionId): void
     {
-        $this->data = $data;
+        $this->sessionId = $sessionId;
     }
 
-    public function getData(): string
+    public function getFilePath(): ?string
     {
-        return $this->data;
+        return $this->filePath;
     }
 
-    /**
-     * @param int $contentLength
-     */
-    public function setContentLength($contentLength): void
+    public function setFilePath(?string $filePath): void
     {
-        $this->contentLength = $contentLength;
+        $this->filePath = $filePath;
     }
 
-    public function getContentLength(): int
+    public function getStorageName(): ?string
     {
-        return $this->contentLength;
+        return $this->storageName;
     }
 
-    /**
-     * @param string $contentType
-     */
-    public function setContentType($contentType): void
-    {
-        $this->contentType = $contentType;
-    }
-
-    public function getContentType(): string
-    {
-        return $this->contentType;
-    }
-
-    /**
-     * @param string $storageName
-     */
-    public function setStorageName($storageName): void
+    public function setStorageName(?string $storageName): void
     {
         $this->storageName = $storageName;
     }
 
-    public function getStorageName(): string
+    public function getData(): ?string
     {
-        return $this->storageName;
+        return $this->data;
+    }
+
+    public function setData(?string $data): void
+    {
+        $this->data = $data;
+    }
+
+    public function getContentType(): ?string
+    {
+        return $this->contentType;
+    }
+
+    public function setContentType(?string $contentType): void
+    {
+        $this->contentType = $contentType;
+    }
+
+    public function getContentLength(): ?int
+    {
+        return $this->contentLength;
+    }
+
+    public function setContentLength(?int $contentLength): void
+    {
+        $this->contentLength = $contentLength;
     }
 }

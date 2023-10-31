@@ -2,16 +2,13 @@
 
 namespace SRIO\RestUploadBundle\Tests\Processor;
 
-use Symfony\Component\HttpFoundation\Request;
-use PHPUnit\Framework\MockObject\MockObject;
 use SRIO\RestUploadBundle\Processor\MultipartUploadProcessor;
-use SRIO\RestUploadBundle\Voter\StorageVoter;
-use SRIO\RestUploadBundle\Upload\StorageHandler;
 use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\Request;
 
 class MultipartUploadProcessorTest extends AbstractProcessorTestCase
 {
-    public function testGetPartsString()
+    public function testGetPartsString(): void
     {
         $client = $this->getNewClient();
         $image = $this->getResource($client, 'apple.gif');
@@ -36,7 +33,7 @@ class MultipartUploadProcessorTest extends AbstractProcessorTestCase
         $this->assertEquals($image, $body);
     }
 
-    public function testGetPartsResource()
+    public function testGetPartsResource(): void
     {
         $client = $this->getNewClient();
         $image = $this->getResource($client, 'apple.gif');
@@ -71,7 +68,7 @@ class MultipartUploadProcessorTest extends AbstractProcessorTestCase
         unlink($tempFile);
     }
 
-    protected function createMultipartRequest($jsonData, $binaryContent): Request
+    protected function createMultipartRequest(string|false $jsonData, string $binaryContent): Request
     {
         $boundary = uniqid();
         $content = $this->createMultipartContent($boundary, $jsonData, $binaryContent);
@@ -79,15 +76,18 @@ class MultipartUploadProcessorTest extends AbstractProcessorTestCase
         return $this->createMultipartRequestWithContent($boundary, $content);
     }
 
-    protected function createMultipartContent($boundary, $jsonData, $binaryContent): string
+    protected function createMultipartContent(string $boundary, string|false $jsonData, string $binaryContent): string
     {
         $content = '--'.$boundary."\r\n".'Content-Type: application/json; charset=UTF-8'."\r\n\r\n".$jsonData."\r\n\r\n";
         $content .= '--'.$boundary."\r\n".'Content-Type: image/gif'."\r\n\r\n".$binaryContent."\r\n\r\n";
 
-        return $content . ('--'.$boundary.'--');
+        return $content.('--'.$boundary.'--');
     }
 
-    protected function createMultipartRequestWithContent($boundary, $content): Request
+    /**
+     * @param false|resource|string $content
+     */
+    protected function createMultipartRequestWithContent(string $boundary, $content): Request
     {
         $request = $this->createMock(Request::class);
         $request->expects($this->any())

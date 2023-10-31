@@ -2,13 +2,13 @@
 
 namespace SRIO\RestUploadBundle\Tests\Upload\Processor;
 
-use Symfony\Component\HttpFoundation\Request;
 use SRIO\RestUploadBundle\Request\RequestContentHandler;
 use SRIO\RestUploadBundle\Tests\Upload\AbstractUploadTestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 class RequestContentHandlerTest extends AbstractUploadTestCase
 {
-    public function testBinaryStringContent()
+    public function testBinaryStringContent(): void
     {
         $client = $this->getNewClient();
         $filePath = $this->getResourcePath($client, 'apple.gif');
@@ -17,7 +17,7 @@ class RequestContentHandlerTest extends AbstractUploadTestCase
         $this->doTest($content, $content);
     }
 
-    public function testBinaryResourceContent()
+    public function testBinaryResourceContent(): void
     {
         $client = $this->getNewClient();
         $filePath = $this->getResourcePath($client, 'apple.gif');
@@ -27,7 +27,7 @@ class RequestContentHandlerTest extends AbstractUploadTestCase
         $this->doTest($expectedContent, $content);
     }
 
-    public function testStringContent()
+    public function testStringContent(): void
     {
         $client = $this->getNewClient();
         $filePath = $this->getResourcePath($client, 'lorem.txt');
@@ -36,7 +36,7 @@ class RequestContentHandlerTest extends AbstractUploadTestCase
         $this->doTest($content, $content);
     }
 
-    public function testStringResourceContent()
+    public function testStringResourceContent(): void
     {
         $client = $this->getNewClient();
         $filePath = $this->getResourcePath($client, 'lorem.txt');
@@ -46,9 +46,12 @@ class RequestContentHandlerTest extends AbstractUploadTestCase
         $this->doTest($expectedContent, $content);
     }
 
-    protected function doTest($expectedContent, $content): void
+    /**
+     * @param false|resource|string $content
+     */
+    protected function doTest(string|false $expectedContent, $content): void
     {
-        $request = $this->createMock('\\'.Request::class);
+        $request = $this->createMock(Request::class);
         $request->expects($this->any())
             ->method('getContent')
             ->will($this->returnValue($content));
@@ -57,10 +60,12 @@ class RequestContentHandlerTest extends AbstractUploadTestCase
         $this->assertFalse($handler->eof());
 
         $foundContent = '';
+        // @phpstan-ignore-next-line
         while (!$handler->eof()) {
             $foundContent .= $handler->gets();
         }
 
+        // @phpstan-ignore-next-line
         $this->assertEquals($expectedContent, $foundContent);
         $this->assertTrue($handler->eof());
     }

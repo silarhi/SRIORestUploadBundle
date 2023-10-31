@@ -2,19 +2,14 @@
 
 namespace SRIO\RestUploadBundle\Tests\Fixtures;
 
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Knp\Bundle\GaufretteBundle\KnpGaufretteBundle;
 use Oneup\FlysystemBundle\OneupFlysystemBundle;
+use Psr\Log\NullLogger;
 use SRIO\RestUploadBundle\SRIORestUploadBundle;
 use SRIO\RestUploadBundle\Tests\Fixtures\Entity\ResumableUploadSession;
-use Doctrine;
-use Knp;
-use Oneup;
-use Psr\Log\NullLogger;
-use SRIO;
 use SRIO\RestUploadBundle\Upload\UploadHandler;
-use Symfony;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;

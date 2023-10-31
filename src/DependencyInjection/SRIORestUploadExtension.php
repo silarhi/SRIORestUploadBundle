@@ -2,12 +2,11 @@
 
 namespace SRIO\RestUploadBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use SRIO\RestUploadBundle\DependencyInjection\Factory\StorageFactory;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -54,8 +53,10 @@ class SRIORestUploadExtension extends Extension
 
     /**
      * Create a single storage service.
+     *
+     * @psalm-param array-key $name
      */
-    private function createStorage(StorageFactory $factory, ContainerBuilder $containerBuilder, $name, array $config): string
+    private function createStorage(StorageFactory $factory, ContainerBuilder $containerBuilder, string|int $name, array $config): string
     {
         $id = sprintf('srio_rest_upload.storage.%s', $name);
 
@@ -68,7 +69,7 @@ class SRIORestUploadExtension extends Extension
     /**
      * Create the storage voter.
      */
-    private function createStorageVoter(ContainerBuilder $builder, $service): void
+    private function createStorageVoter(ContainerBuilder $builder, string $service): void
     {
         $definition = new ChildDefinition($service);
         $builder->setDefinition('srio_rest_upload.storage_voter', $definition);

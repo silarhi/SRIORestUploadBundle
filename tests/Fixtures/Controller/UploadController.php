@@ -3,6 +3,7 @@
 namespace SRIO\RestUploadBundle\Tests\Fixtures\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use SRIO\RestUploadBundle\Storage\UploadedFile;
 use SRIO\RestUploadBundle\Tests\Fixtures\Entity\Media;
 use SRIO\RestUploadBundle\Tests\Fixtures\Form\Type\MediaFormType;
 use SRIO\RestUploadBundle\Upload\UploadHandler;
@@ -25,7 +26,7 @@ class UploadController extends AbstractController
 
         $result = $uploadHandler->handleRequest($request, $form);
 
-        if (($response = $result->getResponse()) !== null) {
+        if (($response = $result->getResponse()) instanceof Response) {
             return $response;
         }
 
@@ -33,8 +34,8 @@ class UploadController extends AbstractController
             throw new BadRequestHttpException();
         }
 
-        if (($file = $result->getFile()) !== null) {
-            /** @var $media Media */
+        if (($file = $result->getFile()) instanceof UploadedFile) {
+            /** @var Media */
             $media = $form->getData();
             $media->setFile($file);
 

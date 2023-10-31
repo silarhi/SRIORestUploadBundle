@@ -4,7 +4,7 @@ namespace SRIO\RestUploadBundle\Tests\Upload;
 
 class SimpleUploadTest extends AbstractUploadTestCase
 {
-    public function testWithEmptyContentTypeHeaderSimpleUpload()
+    public function testWithEmptyContentTypeHeaderSimpleUpload(): void
     {
         $client = $this->getNewClient();
         $queryParameters = ['uploadType' => 'simple', 'name' => 'test'];
@@ -18,7 +18,7 @@ class SimpleUploadTest extends AbstractUploadTestCase
         $this->assertEquals(400, $response->getStatusCode());
     }
 
-    public function testWithoutFormSimpleUpload()
+    public function testWithoutFormSimpleUpload(): void
     {
         $client = $this->getNewClient();
         $queryParameters = ['uploadType' => 'simple'];
@@ -29,7 +29,7 @@ class SimpleUploadTest extends AbstractUploadTestCase
         $this->assertEquals(400, $response->getStatusCode());
     }
 
-    public function testWithoutContentSimpleUpload()
+    public function testWithoutContentSimpleUpload(): void
     {
         $client = $this->getNewClient();
         $queryParameters = ['uploadType' => 'simple', 'name' => 'test'];
@@ -39,7 +39,7 @@ class SimpleUploadTest extends AbstractUploadTestCase
         $this->assertEquals(400, $response->getStatusCode());
     }
 
-    public function testSimpleUpload()
+    public function testSimpleUpload(): void
     {
         $client = $this->getNewClient();
         $queryParameters = ['uploadType' => 'simple', 'name' => 'test'];

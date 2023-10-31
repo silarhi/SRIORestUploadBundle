@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 class ResumableUploadTest extends AbstractUploadTestCase
 {
-    public function testCompleteUpload()
+    public function testCompleteUpload(): void
     {
         $client = $this->startSession();
 
@@ -18,7 +18,7 @@ class ResumableUploadTest extends AbstractUploadTestCase
         $this->assertSuccessful($client, $content);
     }
 
-    public function testChunkedUpload()
+    public function testChunkedUpload(): void
     {
         $client = $this->startSession();
 
@@ -60,12 +60,12 @@ class ResumableUploadTest extends AbstractUploadTestCase
         $response = $client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->headers->has('Location'));
-        $this->assertEquals(0, $response->headers->get('Content-Length', 0));
+        $this->assertEquals(0, (int) $response->headers->get('Content-Length', '0'));
 
         return $client;
     }
 
-    protected function assertSuccessful(KernelBrowser $client, $content): void
+    protected function assertSuccessful(KernelBrowser $client, string $content): void
     {
         $response = $client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
@@ -75,7 +75,7 @@ class ResumableUploadTest extends AbstractUploadTestCase
         $this->assertTrue(array_key_exists('size', $jsonContent));
         $this->assertTrue(array_key_exists('name', $jsonContent));
         $this->assertEquals('test', $jsonContent['name']);
-        $this->assertEquals(strlen((string) $content), $jsonContent['size']);
+        $this->assertEquals(strlen($content), $jsonContent['size']);
 
         $filePath = $this->getUploadedFilePath($client).$jsonContent['path'];
         $this->assertTrue(file_exists($filePath));

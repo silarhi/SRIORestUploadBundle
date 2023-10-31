@@ -4,7 +4,7 @@ namespace SRIO\RestUploadBundle\Tests\Upload;
 
 class MultipartUploadTest extends AbstractUploadTestCase
 {
-    public function testWithoutContent()
+    public function testWithoutContent(): void
     {
         $client = $this->getNewClient();
         $queryParameters = ['name' => 'test'];
@@ -17,7 +17,7 @@ class MultipartUploadTest extends AbstractUploadTestCase
         $this->assertResponseHasErrors($client);
     }
 
-    public function testWithoutHeaders()
+    public function testWithoutHeaders(): void
     {
         $client = $this->getNewClient();
         $queryParameters = ['name' => 'test'];
@@ -32,7 +32,7 @@ class MultipartUploadTest extends AbstractUploadTestCase
         $this->assertResponseHasErrors($client);
     }
 
-    public function testWithoutBoundary()
+    public function testWithoutBoundary(): void
     {
         $client = $this->getNewClient();
         $queryParameters = ['name' => 'test'];
@@ -47,7 +47,7 @@ class MultipartUploadTest extends AbstractUploadTestCase
         $this->assertResponseHasErrors($client);
     }
 
-    public function testBinaryBeforeMeta()
+    public function testBinaryBeforeMeta(): void
     {
         $client = $this->getNewClient();
         $queryParameters = ['name' => 'test'];
@@ -62,7 +62,7 @@ class MultipartUploadTest extends AbstractUploadTestCase
         $this->assertResponseHasErrors($client);
     }
 
-    public function testMultipartUpload()
+    public function testMultipartUpload(): void
     {
         $client = $this->getNewClient();
         $queryParameters = ['name' => 'test'];

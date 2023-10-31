@@ -10,40 +10,20 @@ class FileStorage
 {
     final public const METADATA_CONTENT_TYPE = 'contentType';
 
-    /**
-     * @var FilesystemAdapterInterface
-     */
-    protected $filesystem;
-
-    /**
-     * @var StorageStrategy
-     */
-    protected $storageStrategy;
-
-    /**
-     * @var \Doctrine\ORM\Mapping\NamingStrategy
-     */
-    protected $namingStrategy;
-
-    /**
-     * Constructor.
-     *
-     * @param string $name
-     */
-    public function __construct(protected $name, FilesystemAdapterInterface $filesystem, StorageStrategy $storageStrategy, NamingStrategy $namingStrategy)
-    {
-        $this->filesystem = $filesystem;
-        $this->storageStrategy = $storageStrategy;
-        $this->namingStrategy = $namingStrategy;
+    public function __construct(
+        protected string $name,
+        protected FilesystemAdapterInterface $filesystem,
+        protected StorageStrategy $storageStrategy,
+        protected NamingStrategy $namingStrategy
+    ) {
     }
 
     /**
      * Store a file's content.
      *
-     * @param string $content
-     * @param bool   $overwrite
+     * @param bool $overwrite
      */
-    public function store(UploadContext $context, $content, array $config = [], $overwrite = false): UploadedFile
+    public function store(UploadContext $context, string $content, array $config = [], $overwrite = false): UploadedFile
     {
         $path = $this->getFilePathFromContext($context);
         if (true === $overwrite) {
@@ -61,12 +41,11 @@ class FileStorage
      * Store a file's content.
      *
      * @param resource $resource
-     * @param bool     $overwrite
      */
-    public function storeStream(UploadContext $context, $resource, array $config = [], $overwrite = false): UploadedFile
+    public function storeStream(UploadContext $context, $resource, array $config = [], bool $overwrite = false): UploadedFile
     {
         $path = $this->getFilePathFromContext($context);
-        if (true === $overwrite) {
+        if ($overwrite) {
             $this->filesystem->putStream($path, $resource, $config);
         } else {
             $this->filesystem->writeStream($path, $resource, $config);
@@ -86,7 +65,7 @@ class FileStorage
             return $context->getFile()->getFile()->getName();
         }
 
-        $name = $this->namingStrategy->getName($context);
+        $name = $this->getNamingStrategy()->getName($context);
         $directory = $this->storageStrategy->getDirectory($context, $name);
 
         return $directory.'/'.$name;
@@ -102,10 +81,7 @@ class FileStorage
         return $this->name;
     }
 
-    /**
-     * @return NamingStrategy
-     */
-    public function getNamingStrategy(): \Doctrine\ORM\Mapping\NamingStrategy|NamingStrategy
+    public function getNamingStrategy(): NamingStrategy
     {
         return $this->namingStrategy;
     }

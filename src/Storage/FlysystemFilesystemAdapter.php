@@ -43,8 +43,8 @@ class FlysystemFilesystemAdapter implements FilesystemAdapterInterface
             $this->filesystem->write($path, $content, $config);
 
             return true;
-        } catch (FileExistsException $fileExistsException) {
-            throw $this->createFileExistsException($fileExistsException);
+        } catch (UnableToWriteFile $unableToWriteFile) {
+            throw $this->createFileExistsException($unableToWriteFile);
         }
     }
 
@@ -61,20 +61,20 @@ class FlysystemFilesystemAdapter implements FilesystemAdapterInterface
 
     public function put(string $path, mixed $content, array $config = []): bool
     {
-        return $this->filesystem->write($path, $content, $config);
+        return $this->write($path, $content, $config);
     }
 
     public function putStream(string $path, $resource, array $config = []): bool
     {
-        return $this->filesystem->writeStream($path, $resource, $config);
+        return $this->writeStream($path, $resource, $config);
     }
 
-    public function read(string $path): false|string
+    public function read(string $path): string
     {
         try {
             return $this->filesystem->read($path);
-        } catch (WrappingFileNotFoundException $wrappingFileNotFoundException) {
-            throw $this->createFileNotFoundException($wrappingFileNotFoundException);
+        } catch (UnableToReadFile $unableToReadFile) {
+            throw $this->createFileNotFoundException($unableToReadFile);
         }
     }
 
@@ -82,8 +82,8 @@ class FlysystemFilesystemAdapter implements FilesystemAdapterInterface
     {
         try {
             return $this->filesystem->readStream($path);
-        } catch (FileNotFoundException $fileNotFoundException) {
-            throw $this->createFileNotFoundException($fileNotFoundException);
+        } catch (UnableToReadFile $unableToReadFile) {
+            throw $this->createFileNotFoundException($unableToReadFile);
         }
     }
 
@@ -91,9 +91,10 @@ class FlysystemFilesystemAdapter implements FilesystemAdapterInterface
     {
         try {
             $this->filesystem->delete($path);
+
             return true;
-        } catch (UnableToDeleteFile $fileNotFoundException) {
-            throw $this->createFileNotFoundException($fileNotFoundException);
+        } catch (UnableToDeleteFile $unableToDeleteFile) {
+            throw $this->createFileNotFoundException($unableToDeleteFile);
         }
     }
 
@@ -103,7 +104,7 @@ class FlysystemFilesystemAdapter implements FilesystemAdapterInterface
 
         // Neatly overflow into a file on disk after more than 10MBs.
         $mbLimit = 10 * 1024 * 1024;
-        $streamCopy = fopen('php://temp/maxmemory:' . $mbLimit, 'w+b');
+        $streamCopy = fopen('php://temp/maxmemory:'.$mbLimit, 'w+b');
 
         stream_copy_to_stream($stream, $streamCopy);
         rewind($streamCopy);
@@ -115,8 +116,8 @@ class FlysystemFilesystemAdapter implements FilesystemAdapterInterface
     {
         try {
             return $this->filesystem->lastModified($path);
-        } catch (UnableToRetrieveMetadata $exception) {
-            throw $this->createFileNotFoundException($exception);
+        } catch (UnableToRetrieveMetadata $unableToRetrieveMetadata) {
+            throw $this->createFileNotFoundException($unableToRetrieveMetadata);
         }
     }
 
@@ -124,8 +125,8 @@ class FlysystemFilesystemAdapter implements FilesystemAdapterInterface
     {
         try {
             return $this->filesystem->fileSize($path);
-        } catch (UnableToRetrieveMetadata $exception) {
-            throw $this->createFileNotFoundException($exception);
+        } catch (UnableToRetrieveMetadata $unableToRetrieveMetadata) {
+            throw $this->createFileNotFoundException($unableToRetrieveMetadata);
         }
     }
 
@@ -133,8 +134,8 @@ class FlysystemFilesystemAdapter implements FilesystemAdapterInterface
     {
         try {
             return $this->filesystem->mimeType($path);
-        } catch (UnableToRetrieveMetadata $exception) {
-            throw $this->createFileNotFoundException($exception);
+        } catch (UnableToRetrieveMetadata $unableToRetrieveMetadata) {
+            throw $this->createFileNotFoundException($unableToRetrieveMetadata);
         }
     }
 

@@ -2,11 +2,10 @@
 
 namespace SRIO\RestUploadBundle\Tests\Processor;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject;
 use ReflectionClass;
 use ReflectionMethod;
+use SRIO\RestUploadBundle\Processor\MultipartUploadProcessor;
 use SRIO\RestUploadBundle\Tests\Upload\AbstractUploadTestCase;
 
 abstract class AbstractProcessorTestCase extends AbstractUploadTestCase
@@ -14,7 +13,7 @@ abstract class AbstractProcessorTestCase extends AbstractUploadTestCase
     /**
      * Call an object method, even if it is private or protected.
      */
-    protected function callMethod($object, $methodName, array $arguments): mixed
+    protected function callMethod(MultipartUploadProcessor $object, string $methodName, array $arguments): mixed
     {
         $method = $this->getMethod($object::class, $methodName);
 
@@ -23,8 +22,13 @@ abstract class AbstractProcessorTestCase extends AbstractUploadTestCase
 
     /**
      * Get a protected method as public.
+     *
+     * @param class-string|string $className
+     *
+     * @psalm-param '\SRIO\RestUploadBundle\Processor\ResumableUploadProcessor'|class-string $className
+     * @psalm-param 'parseContentRange' $name
      */
-    protected function getMethod($className, $name): ReflectionMethod
+    protected function getMethod(string $className, string $name): ReflectionMethod
     {
         $class = new ReflectionClass($className);
 

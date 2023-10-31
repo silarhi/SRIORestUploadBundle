@@ -6,14 +6,8 @@ use Gaufrette\File;
 
 class GaufretteFileAdapter implements FileAdapterInterface
 {
-    /**
-     * @var File
-     */
-    protected $file;
-
-    public function __construct(File $file)
+    public function __construct(protected File $file)
     {
-        $this->file = $file;
     }
 
     public function exists(): bool
@@ -31,7 +25,7 @@ class GaufretteFileAdapter implements FileAdapterInterface
         return $this->file->getKey();
     }
 
-    public function getAdapter()
+    public function getAdapter(): File
     {
         return $this->file;
     }

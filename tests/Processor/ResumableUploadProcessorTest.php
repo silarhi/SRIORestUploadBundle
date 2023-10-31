@@ -2,17 +2,17 @@
 
 namespace SRIO\RestUploadBundle\Tests\Processor;
 
-use SRIO\RestUploadBundle\Upload\StorageHandler;
-use SRIO\RestUploadBundle\Tests\Fixtures\Entity\ResumableUploadSession;
 use SRIO\RestUploadBundle\Exception\UploadProcessorException;
 use SRIO\RestUploadBundle\Processor\ResumableUploadProcessor;
+use SRIO\RestUploadBundle\Tests\Fixtures\Entity\ResumableUploadSession;
+use SRIO\RestUploadBundle\Upload\StorageHandler;
 
 class ResumableUploadProcessorTest extends AbstractProcessorTestCase
 {
     /**
      * @dataProvider contentSuccessRangeDataProvider
      */
-    public function testSuccessComputeContentRange($string, $start, $end, $length)
+    public function testSuccessComputeContentRange(string $string, int|string|null $start, int|string|null $end, int|null $length): void
     {
         $result = $this->callParseContentRange($string);
         $this->assertTrue(is_array($result));
@@ -24,7 +24,7 @@ class ResumableUploadProcessorTest extends AbstractProcessorTestCase
     /**
      * @dataProvider contentErrorRangeDataProvider
      */
-    public function testErrorComputeContentRange($string)
+    public function testErrorComputeContentRange(string $string): void
     {
         $this->expectException(UploadProcessorException::class);
         $this->callParseContentRange($string);
@@ -33,13 +33,11 @@ class ResumableUploadProcessorTest extends AbstractProcessorTestCase
     /**
      * Call parseContentRange function.
      */
-    protected function callParseContentRange($string): mixed
+    protected function callParseContentRange(string $string): mixed
     {
-        $storageHandler = $this->createMock(
-            '\\'.StorageHandler::class,
-        );
+        $storageHandler = $this->createMock(StorageHandler::class);
 
-        $method = $this->getMethod('\\'.ResumableUploadProcessor::class, 'parseContentRange');
+        $method = $this->getMethod(ResumableUploadProcessor::class, 'parseContentRange');
         $em = $this->getMockEntityManager();
         $uploadProcessor = new ResumableUploadProcessor($storageHandler, $em, ResumableUploadSession::class);
 

@@ -2,36 +2,25 @@
 
 namespace SRIO\RestUploadBundle\Upload;
 
-use Symfony\Component\HttpFoundation\Response;
 use SRIO\RestUploadBundle\Exception\UploadException;
+use Symfony\Component\HttpFoundation\Response;
+
 class UploadResult extends UploadContext
 {
-    /**
-     * @var ?Response
-     */
-    protected $response;
+    protected ?Response $response = null;
 
-    /**
-     * @var UploadException
-     */
-    protected $exception;
+    protected ?UploadException $exception = null;
 
-    /**
-     * @param UploadException $exception
-     */
-    public function setException($exception): void
+    public function setException(?UploadException $exception): void
     {
         $this->exception = $exception;
     }
 
-    public function getException(): UploadException
+    public function getException(): ?UploadException
     {
         return $this->exception;
     }
 
-    /**
-     * @param Response $response
-     */
     public function setResponse(?Response $response): void
     {
         $this->response = $response;

@@ -20,42 +20,32 @@ class Media implements UploadableFileInterface
      *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    public $mimeType;
+    public ?string $mimeType = null;
 
     /**
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    public $path;
+    public ?string $path = null;
 
     /**
      * @ORM\Column(type="integer")
-     *
-     * @var int
      */
-    public $size;
+    public ?int $size = null;
 
     /**
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    public $originalName;
+    public ?string $originalName = null;
 
     /**
      * Set uploaded file.

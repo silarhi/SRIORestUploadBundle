@@ -2,33 +2,27 @@
 
 namespace SRIO\RestUploadBundle\Storage;
 
+use Exception;
+use Gaufrette\Adapter;
 use Gaufrette\Adapter\MetadataSupporter;
-use Gaufrette\Exception\FileAlreadyExists;
 use Gaufrette\Exception\FileNotFound;
 use Gaufrette\Filesystem;
 use Gaufrette\StreamMode;
 use RuntimeException;
-use SRIO\RestUploadBundle\Exception\FileExistsException as WrappingFileExistsException;
 use SRIO\RestUploadBundle\Exception\FileNotFoundException as WrappingFileNotFoundException;
 
 class GaufretteFilesystemAdapter implements FilesystemAdapterInterface
 {
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
-
-    public function __construct(Filesystem $filesystem)
+    public function __construct(protected Filesystem $filesystem)
     {
-        $this->filesystem = $filesystem;
     }
 
-    public function getFilesystem(): mixed
+    public function getFilesystem(): Filesystem
     {
         return $this->filesystem;
     }
 
-    public function getAdapter(): mixed
+    public function getAdapter(): Adapter
     {
         return $this->filesystem->getAdapter();
     }
@@ -72,7 +66,7 @@ class GaufretteFilesystemAdapter implements FilesystemAdapterInterface
      *
      * @param bool $overwrite
      */
-    protected function writeContents($path, $content, array $config = [], $overwrite = false): bool
+    protected function writeContents(string $path, string|false $content, array $config = [], $overwrite = false): bool
     {
         if (!empty($config['metadata'])) {
             $adapter = $this->getAdapter();
@@ -110,12 +104,10 @@ class GaufretteFilesystemAdapter implements FilesystemAdapterInterface
         return $map;
     }
 
-    public function read(string $path): bool|string
+    public function read(string $path): false|string
     {
         try {
-            $this->filesystem->read($path);
-
-            return true;
+            return $this->filesystem->read($path);
         } catch (FileNotFound $ex) {
             throw $this->createFileNotFoundException($path, $ex);
         } catch (RuntimeException) {
@@ -160,7 +152,7 @@ class GaufretteFilesystemAdapter implements FilesystemAdapterInterface
 
         // Neatly overflow into a file on disk after more than 10MBs.
         $mbLimit = 10 * 1024 * 1024;
-        $streamCopy = fopen('php://temp/maxmemory:' . $mbLimit, 'w+b');
+        $streamCopy = fopen('php://temp/maxmemory:'.$mbLimit, 'w+b');
         if (false === $stream) {
             // This is not ideal, read will first read the full file into memory before we can
             // flow it into the temp stream. Watch out with big files and Gaufrette!
@@ -184,48 +176,39 @@ class GaufretteFilesystemAdapter implements FilesystemAdapterInterface
         }
     }
 
-    public function getModifiedTimestamp(string $path): bool|int
+    public function getModifiedTimestamp(string $path): int
     {
         try {
-            return $this->filesystem->mtime($path);
-        } catch (FileNotFound $fileNotFound) {
-            throw $this->createFileNotFoundException($path, $fileNotFound);
+            return $this->filesystem->mtime($path) ?: 0;
+        } catch (Exception $exception) {
+            throw $this->createFileNotFoundException($path, $exception);
         }
     }
 
-    public function getSize(string $path)
+    public function getSize(string $path): int
     {
         try {
-            return $this->filesystem->size($path);
-        } catch (FileNotFound $fileNotFound) {
-            throw $this->createFileNotFoundException($path, $fileNotFound);
+            return $this->filesystem->size($path) ?: 0;
+        } catch (Exception $exception) {
+            throw $this->createFileNotFoundException($path, $exception);
         }
     }
 
-    public function getMimeType(string $path)
+    public function getMimeType(string $path): string
     {
         try {
             return $this->filesystem->mimeType($path);
-        } catch (FileNotFound $fileNotFound) {
-            throw $this->createFileNotFoundException($path, $fileNotFound);
+        } catch (Exception $exception) {
+            throw $this->createFileNotFoundException($path, $exception);
         }
     }
 
-    protected function createFileNotFoundException($path, $previousEx = null): WrappingFileNotFoundException
+    protected function createFileNotFoundException(string $path, Exception $previousEx = null): WrappingFileNotFoundException
     {
-        if (null === $previousEx) {
+        if (!$previousEx instanceof FileNotFound) {
             $previousEx = new FileNotFound($path);
         }
 
         return new WrappingFileNotFoundException($previousEx->getMessage(), $previousEx->getCode(), $previousEx);
-    }
-
-    protected function createFileExistsException($path, $previousEx = null): WrappingFileExistsException
-    {
-        if (null === $previousEx) {
-            $previousEx = new FileAlreadyExists($path);
-        }
-
-        return new WrappingFileExistsException($previousEx->getMessage(), $previousEx->getCode(), $previousEx);
     }
 }

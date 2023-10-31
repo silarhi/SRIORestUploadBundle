@@ -7,7 +7,7 @@ interface RequestContentHandlerInterface
     /**
      * Get a line.
      */
-    public function gets(): string;
+    public function gets(): string|false;
 
     /**
      * Is the end of file.

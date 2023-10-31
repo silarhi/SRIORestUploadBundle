@@ -8,73 +8,25 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UploadContext
 {
-    /**
-     * @var UploadedFile
-     */
-    protected $file;
+    protected ?UploadedFile $file = null;
 
-    /**
-     * @var FormInterface
-     */
-    protected $form;
-
-    /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * @var string
-     */
-    protected $storageName;
+    protected ?string $storageName = null;
 
     /**
      * Constructor.
      */
-    public function __construct(Request $request = null, FormInterface $form = null, array $config = [])
+    public function __construct(protected ?Request $request = null, protected ?FormInterface $form = null, protected array $config = [])
     {
-        $this->request = $request;
-        $this->form = $form;
-        $this->config = $config;
     }
 
-    /**
-     * @param array $config
-     */
-    public function setConfig($config): void
-    {
-        $this->config = $config;
-    }
-
-    public function getConfig(): array
-    {
-        return $this->config;
-    }
-
-    /**
-     * @param UploadedFile $file
-     */
-    public function setFile($file): void
-    {
-        $this->file = $file;
-    }
-
-    public function getFile(): UploadedFile
+    public function getFile(): ?UploadedFile
     {
         return $this->file;
     }
 
-    /**
-     * @param FormInterface $form
-     */
-    public function setForm($form): void
+    public function setFile(?UploadedFile $file): void
     {
-        $this->form = $form;
+        $this->file = $file;
     }
 
     public function getForm(): ?FormInterface
@@ -82,12 +34,9 @@ class UploadContext
         return $this->form;
     }
 
-    /**
-     * @param Request $request
-     */
-    public function setRequest($request): void
+    public function setForm(?FormInterface $form): void
     {
-        $this->request = $request;
+        $this->form = $form;
     }
 
     public function getRequest(): ?Request
@@ -95,16 +44,28 @@ class UploadContext
         return $this->request;
     }
 
-    /**
-     * @param string $storageName
-     */
-    public function setStorageName($storageName): void
+    public function setRequest(?Request $request): void
     {
-        $this->storageName = $storageName;
+        $this->request = $request;
     }
 
-    public function getStorageName(): string
+    public function getConfig(): array
+    {
+        return $this->config;
+    }
+
+    public function setConfig(array $config): void
+    {
+        $this->config = $config;
+    }
+
+    public function getStorageName(): ?string
     {
         return $this->storageName;
+    }
+
+    public function setStorageName(?string $storageName): void
+    {
+        $this->storageName = $storageName;
     }
 }

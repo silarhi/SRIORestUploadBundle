@@ -2,51 +2,31 @@
 
 namespace SRIO\RestUploadBundle\Processor;
 
-use SRIO\RestUploadBundle\Upload\UploadResult;
 use SRIO\RestUploadBundle\Exception\UploadException;
-use SRIO\RestUploadBundle\Exception\UploadProcessorException;
-use SRIO\RestUploadBundle\Model\UploadableFileInterface;
 use SRIO\RestUploadBundle\Request\RequestContentHandler;
 use SRIO\RestUploadBundle\Request\RequestContentHandlerInterface;
 use SRIO\RestUploadBundle\Upload\StorageHandler;
+use SRIO\RestUploadBundle\Upload\UploadResult;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractUploadProcessor implements ProcessorInterface
 {
-    /**
-     * @var FormInterface
-     */
-    protected $form;
+    protected ?FormInterface $form = null;
 
-    /**
-     * @var array
-     */
-    protected $config = [];
+    protected array $config = [];
 
-    /**
-     * @var RequestContentHandler
-     */
-    protected $contentHandler;
-
-    /**
-     * @var StorageHandler
-     */
-    protected $storageHandler;
+    protected ?RequestContentHandler $contentHandler = null;
 
     /**
      * Constructor.
      */
-    public function __construct(StorageHandler $storageHandler)
+    public function __construct(protected StorageHandler $storageHandler)
     {
-        $this->storageHandler = $storageHandler;
     }
 
     /**
      * Constructor.
-     *
-     * @return bool
      */
     public function handleUpload(Request $request, FormInterface $form = null, array $config = []): UploadResult
     {
@@ -84,7 +64,7 @@ abstract class AbstractUploadProcessor implements ProcessorInterface
     {
         $keys = [];
         foreach ($form->all() as $child) {
-            $keys[$child->getName()] = $child->all() !== [] ? $this->getFormKeys($child) : null;
+            $keys[$child->getName()] = [] !== $child->all() ? $this->getFormKeys($child) : null;
         }
 
         return $keys;
@@ -97,7 +77,7 @@ abstract class AbstractUploadProcessor implements ProcessorInterface
      */
     protected function getRequestContentHandler(Request $request): RequestContentHandler|RequestContentHandlerInterface
     {
-        if (null === $this->contentHandler) {
+        if (!$this->contentHandler instanceof RequestContentHandler) {
             $this->contentHandler = new RequestContentHandler($request);
         }
 
@@ -118,26 +98,9 @@ abstract class AbstractUploadProcessor implements ProcessorInterface
             $value = $request->headers->get($header, null);
             if (null === $value) {
                 throw new UploadException(sprintf('%s header is needed', $header));
-            } elseif (!is_int($value) && empty($value) && '0' !== $value) {
+            } elseif (!ctype_digit($value) && empty($value) && '0' !== $value) {
                 throw new UploadException(sprintf('%s header must not be empty', $header));
             }
-        }
-    }
-
-    /**
-     * Set the uploaded file on the form data.
-     *
-     * @throws UploadProcessorException
-     *
-     * @deprecated
-     */
-    protected function setUploadedFile(UploadedFile $file): void
-    {
-        $data = $this->form->getData();
-        if ($data instanceof UploadableFileInterface) {
-            $data->setFile($file);
-        } else {
-            throw new UploadProcessorException(sprintf('Unable to set file, %s do not implements %s', $data::class, UploadableFileInterface::class));
         }
     }
 }

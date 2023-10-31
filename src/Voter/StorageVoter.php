@@ -19,12 +19,7 @@ class StorageVoter
      */
     protected $storages = [];
 
-    /**
-     * Constructor.
-     *
-     * @param string $defaultStorage
-     */
-    public function __construct(protected $defaultStorage = null)
+    public function __construct(protected ?string $defaultStorage = null)
     {
     }
 

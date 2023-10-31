@@ -7,6 +7,7 @@ use SRIO\RestUploadBundle\Exception\UploadException;
 use SRIO\RestUploadBundle\Storage\FileStorage;
 use SRIO\RestUploadBundle\Upload\UploadResult;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 class FormDataUploadProcessor extends SimpleUploadProcessor
@@ -44,7 +45,8 @@ class FormDataUploadProcessor extends SimpleUploadProcessor
                 throw new UploadException(sprintf('%s request field not found in (%s)', $this->config[self::KEY_FIELD_FORM], implode(', ', $request->request->keys())));
             }
 
-            $submittedValue = $request->request->get($this->config[self::KEY_FIELD_FORM]);
+            $submittedValue = $request->request->get($this->config[self::KEY_FIELD_FORM])
+                ?? $request->request->all($this->config[self::KEY_FIELD_FORM]);
             if (is_string($submittedValue)) {
                 $submittedValue = json_decode($submittedValue, true, 512, JSON_THROW_ON_ERROR);
                 if (!$submittedValue) {
@@ -62,7 +64,7 @@ class FormDataUploadProcessor extends SimpleUploadProcessor
             }
         }
 
-        /** @var $uploadedFile \Symfony\Component\HttpFoundation\File\UploadedFile */
+        /** @var UploadedFile */
         $uploadedFile = $request->files->get($this->config[self::KEY_FIELD_FILE]);
         $contents = file_get_contents($uploadedFile->getPathname());
         $file = $this->storageHandler->store($response, $contents, ['metadata' => [FileStorage::METADATA_CONTENT_TYPE => $uploadedFile->getMimeType()]]);
