@@ -4,3 +4,8 @@
 
 /vendor
 /cov
+/tests/Fixtures/var/*
+.phpunit.result.cache
+.phpunit.cache
+composer.lock
+.php-cs-fixer.cache
