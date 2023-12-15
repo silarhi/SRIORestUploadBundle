@@ -41,8 +41,5 @@
     },
     "scripts": {
         "test": "./test.sh"
-    },
-    "target-dir": "SRIO/RestUploadBundle",
-    "config": {
     }
 }
