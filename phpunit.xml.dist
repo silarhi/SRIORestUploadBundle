@@ -1,32 +1,28 @@
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
-         syntaxCheck="false"
-         bootstrap="Tests/bootstrap.php"
-        >
-    <testsuites>
-        <testsuite name="RestuUploadBundle Test Suite">
-            <directory>./Tests/</directory>
-        </testsuite>
-    </testsuites>
-
-    <php>
-        <server name="KERNEL_DIR" value="./Tests/Fixtures/App/app" />
-    </php>
-
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+<?xml version="1.0"?>
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
+        colors="true"
+        bootstrap="vendor/autoload.php"
+        failOnRisky="true"
+        failOnWarning="true"
+        cacheDirectory=".phpunit.cache"
+>
+  <coverage/>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+    <server name="KERNEL_CLASS" value="SRIO\RestUploadBundle\Tests\Fixtures\Kernel"/>
+    <server name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;max[direct]=0"/>
+    <server name="DATABASE_URL" value="sqlite:///%kernel.project_dir%/tests/Fixtures/var/data.db"/>
+  </php>
+  <testsuites>
+    <testsuite name="SRIOUploadBundle Test Suite">
+      <directory>./tests/</directory>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </source>
 </phpunit>
