@@ -1,5 +1,5 @@
 {
-    "name": "srio/rest-upload-bundle",
+    "name": "silarhi/rest-upload-bundle",
     "description": "Handle multiple rest upload ways",
     "keywords": ["symfony", "file", "upload", "api", "rest", "multipart", "resumable", "form-data"],
     "type": "symfony-bundle",
