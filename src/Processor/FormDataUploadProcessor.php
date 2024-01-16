@@ -45,8 +45,8 @@ class FormDataUploadProcessor extends SimpleUploadProcessor
                 throw new UploadException(sprintf('%s request field not found in (%s)', $this->config[self::KEY_FIELD_FORM], implode(', ', $request->request->keys())));
             }
 
-            $submittedValue = $request->request->get($this->config[self::KEY_FIELD_FORM])
-                ?? $request->request->all($this->config[self::KEY_FIELD_FORM]);
+            $submittedValues = $request->request->all();
+            $submittedValue = $submittedValues[$this->config[self::KEY_FIELD_FORM]] ?? null;
             if (is_string($submittedValue)) {
                 $submittedValue = json_decode($submittedValue, true, 512, JSON_THROW_ON_ERROR);
                 if (!$submittedValue) {
